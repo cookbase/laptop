@@ -1,0 +1,8 @@
+cookbook_paths:
+ - ./site-cookbooks
+recipes:
+ - mac_os_x
+ - dmg
+ - zip_app
+ - cookbase
+
