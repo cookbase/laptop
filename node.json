@@ -1,0 +1,9 @@
+{
+    "run_list": [
+        "recipe[mac_os_x]",
+        "recipe[dmg]",
+        //"recipe[homebrew]",
+        "recipe[zip_app]",
+        "recipe[cookbase]"
+    ]
+}
