@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+#^syntax detection
+
+site 'http://community.opscode.com/api/v1'
+cookbook 'mac_os_x'
+cookbook 'dmg'
+cookbook 'homebrew'
+#cookbook 'ruby_build'
+cookbook 'zip_app'
