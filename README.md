@@ -1,6 +1,6 @@
-**Solo cooking with chef**
+##Solo cooking with chef-solo##
 
-Unlike the Server driven cookbook intro I wrote a while back [ link ], I came across a need of using solo,
+Unlike the Server driven [cookbook intro I wrote a while back](http://www.hagzag.com/blog/2013/01/20/writing-a-chef-cookbook/), I came across a need of using solo,
 I must admit it's been quite while hacking @ Chef and it's come a long way ...
 
 ## What we are going todo ? ##
@@ -113,7 +113,7 @@ And the OSX tweaks are achived by appending the following to the default.rb:
 	include_recipe 'cookbase::osx_hacks'	
 
 And of course creating the osx_hacks.rb file [ in thre recipes directory ]
-I put the first one as an example you can see the full file in the repository ...
+I put the first one as an example you can see the full file in [the repository](https://github.com/cookbase/laptop) ...
 
 	...
 
@@ -135,7 +135,7 @@ I put the first one as an example you can see the full file in the repository ..
 	cookbook 'zip_app'
 	EOF
 
-## Create oloist file 
+## Create *Soloist* file 
 	cat > recipes: << EOF
 	  - mac_os_x
 	  - homebrew
