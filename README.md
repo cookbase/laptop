@@ -1,7 +1,18 @@
 ##Solo cooking with chef-solo##
 
+![Chef logo](http://tickets.opscode.com/secure/projectavatar?pid=10000&avatarId=11981&size=large)
+
 Unlike the Server driven [cookbook intro I wrote a while back](http://www.hagzag.com/blog/2013/01/20/writing-a-chef-cookbook/), I came across a need of using solo,
 I must admit it's been quite while hacking @ Chef and it's come a long way ...
+BTW, if you dont have a mac - don't try this ... ;) => this was tested on ![Mountin Lion](http://users.skynet.be/moonapp/images/general/MountainLion43.png)
+
+#### Cut the bulls**t ####
+If you are saying to your self I want to get my hands dirty - cut the bulls**t so just:
+
+	git clone https://github.com/cookbase/laptop.git
+	cd laptop && soloist
+Wait for magic to happen ...
+
 
 ## What we are going todo ? ##
 Install some stuff on my laptop for this example: Sublime text 2 (version 2.0.2), Vagrant (version 1.2.2), Hombrew latest ...
@@ -261,5 +272,5 @@ Great bottom line **	Chef Client finished, 11 resources updated** ...
 
 References:
 
-1. Sololist: https://github.com/mkocher/soloist
+1. [Sololist repository see the README.md](https://github.com/mkocher/soloist)
 2. Another awesome tool out there is: [solowizard](http://www.solowizard.com/) - mix 'n' match, generate a script which uses chef-solo to bootstrap your laptop.
