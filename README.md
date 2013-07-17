@@ -8,9 +8,10 @@ BTW, if you dont have a mac - don't try this ... ;) => this was tested on ![Moun
 
 #### Cut the bulls**t ####
 If you are saying to your self I want to get my hands dirty - cut the bulls**t so just:
-
-	git clone https://github.com/cookbase/laptop.git
-	cd laptop && soloist
+```bash 
+git clone https://github.com/cookbase/laptop.git
+cd laptop && soloist
+```
 Wait for magic to happen ...
 
 
@@ -41,39 +42,40 @@ I assume you have ruby and gems install so I can continue from here ...
 	mkdir laptop 
 
 ###	Create a git repo
-	cd laptop && git init .
-
+```bash 
+cd laptop && git init .
+```
 ###	Create a git ignore file [ We do not want cookbooks & cookbook cache to make way into our repository ]
-
-	cat > .gitignore << EOF
-	cookbooks
-	tmp
-	EOF
-
+```bash
+cat > .gitignore << EOF
+cookbooks
+tmp
+EOF
+```
 
 ## Create Gemfile with deps ...
-
-	cat > Gemfile <<EOF
-	source :rubygems
-	gem 'chef'
-	gem 'soloist'
-	EOF
-
+```bash 
+cat > Gemfile <<EOF
+source :rubygems
+gem 'chef'
+gem 'soloist'
+EOF
+```
 Let's get those gems ...
-
-	bundle
-
+```bash 
+bundle
+```
 Long list (see the deps librarian & libraian-chef ... by running *gem list* )
 
-	...
-	Using chef (11.4.4) 
-	Installing hashie (1.2.0) 
-	Using thor (0.18.1) 
-	Using librarian (0.1.0) 
-	Using librarian-chef (0.0.1) 
-	Installing soloist (1.0.1) 
-	Using bundler (1.3.5) 
-	...
+```ruby
+Using chef (11.4.4) 
+Installing hashie (1.2.0) 
+Using thor (0.18.1) 
+Using librarian (0.1.0) 
+Using librarian-chef (0.0.1) 
+Installing soloist (1.0.1) 
+Using bundler (1.3.5) 
+```
 
 ## My dmg's & Cookbook deps ... 
 
@@ -84,102 +86,103 @@ And I will need the dmg cookbook in order to install then [ put a pin in that wh
 In order to set mac osx stuff like I mentioned I can use the [mac_os_x cookbook by opscode](http://community.opscode.com/cookbooks/mac_os_x)
 
 Optional but recommended - get the shasum of the dmg's so the download is validated before installation for example:
-
-	shasum -a 256 ~/Downloads/Sublime\ Text\ 2.0.2.dmg 
-	906e71e19ae5321f80e7cf42eab8355146d8f2c3fd55be1f7fe5c62c57165add  /Users/c5191707/Downloads/Sublime Text 2.0.2.dmg
-
+```bash
+shasum -a 256 ~/Downloads/Sublime\ Text\ 2.0.2.dmg 
+906e71e19ae5321f80e7cf42eab8355146d8f2c3fd55be1f7fe5c62c57165add  /Users/c5191707/Downloads/Sublime Text 2.0.2.dmg
+```
 
 ## Write your own *cookbook* ... [ reuse others in your cookbook]
-	
-	mkdir -p ./site-cookbooks/cookbase/{attributes,files,recipes}
-
+```bash	
+mkdir -p ./site-cookbooks/cookbase/{attributes,files,recipes}
 *vim ./site-cookbooks/cookbase/attributes/default.rb 	*
+```
 Tell our recipe where to get the dmg's from, and these can be changed to fit your local artifact server / repo.
-
-	default[:cookbase][:st_pkg_url] = "http://c758482.r82.cf2.rackcdn.com/Sublime%20Text%202.0.2.dmg"
-	default[:cookbase][:vagrant_pkg_url] = "http://files.vagrantup.com/packages/7e400d00a3c5a0fdf2809c8b5001a035415a607b/Vagrant-1.2.2.dmg"
-
+```ruby
+default[:cookbase][:st_pkg_url] = "http://c758482.r82.cf2.rackcdn.com/Sublime%20Text%202.0.2.dmg"
+default[:cookbase][:vagrant_pkg_url] = "http://files.vagrantup.com/packages/7e400d00a3c5a0fdf2809c8b5001a035415a607b/Vagrant-1.2.2.dmg"
+```
 *vim ./site-cookbooks/cookbase/recipes/default.rb*
 Let's use the dmg cookbook for our packadges:
-	
-	dmg_package 'Sublime Text 2' do
-	  source "#{node[:cookbase][:st_pkg_url]}"
-	  checksum "906e71e19ae5321f80e7cf42eab8355146d8f2c3fd55be1f7fe5c62c57165add"
-	end
-	link "/usr/local/bin/subl" do
-	  to '/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl'
-	end
-
+```ruby
+dmg_package 'Sublime Text 2' do
+  source "#{node[:cookbase][:st_pkg_url]}"
+  checksum "906e71e19ae5321f80e7cf42eab8355146d8f2c3fd55be1f7fe5c62c57165add"
+end
+link "/usr/local/bin/subl" do
+  to '/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl'
+end
+```
 And the same kind of chunk for Vagrant ...
-	
-	dmg_package 'Vagrant' do
-	  source "#{node[:cookbase][:vagrant_pkg_url]}"
-	  checksum "1581552841e076043308f330a5b1130b455c604846116c54b5330bb17240c7ee"
-	  type 'pkg'
-	  package_id 'com.vagrant.vagrant'
-	end
-
+```ruby	
+dmg_package 'Vagrant' do
+  source "#{node[:cookbase][:vagrant_pkg_url]}"
+  checksum "1581552841e076043308f330a5b1130b455c604846116c54b5330bb17240c7ee"
+  type 'pkg'
+  package_id 'com.vagrant.vagrant'
+end
+```
 And the OSX tweaks are achived by appending the following to the default.rb:
-
-	include_recipe 'cookbase::osx_hacks'	
-
+```ruby
+include_recipe 'cookbase::osx_hacks'	
+```
 And of course creating the osx_hacks.rb file [ in thre recipes directory ]
 I put the first one as an example you can see the full file in [the repository](https://github.com/cookbase/laptop) ...
 
-	...
-
-	mac_os_x_userdefaults 'Finder: show hidden files by default' do
-	  domain 'com.apple.finder'
-	  key 'AppleShowAllFiles'
-	  value 'true'
-	  type 'bool'
-	end	
-	...
+```ruby
+mac_os_x_userdefaults 'Finder: show hidden files by default' do
+  domain 'com.apple.finder'
+  key 'AppleShowAllFiles'
+  value 'true'
+  type 'bool'
+end	
+```
 
 ## Create a *Cheffile*
+```bash
+cat > Cheffile << EOF
+cookbook 'mac_os_x'
+cookbook 'dmg'	
+cookbook 'homebrew'
+cookbook 'ruby_build'
+cookbook 'zip_app'
+EOF
+```
 
-	cat > Cheffile << EOF
-	cookbook 'mac_os_x'
-	cookbook 'dmg'	
-	cookbook 'homebrew'
-	cookbook 'ruby_build'
-	cookbook 'zip_app'
-	EOF
-
-## Create *Soloist* file 
-	cat > recipes: << EOF
-	  - mac_os_x
-	  - homebrew
-	  - dmg
-	  - zip_app
-	  - cookbase
-	EOF
-
+## Create *Soloist* file
+```bash
+cat > recipes: << EOF
+  - mac_os_x
+  - homebrew
+  - dmg
+  - zip_app
+  - cookbase
+EOF
+```
 ## Alternatively a json file [ before the soloist option ... ] would look like:
-
-	{
-	    "run_list": [
-	        "recipe[mac_os_x]",
-	        "recipe[dmg]",
-	        "recipe[homebrew]",
-	        "recipe[zip_app]",
-	        "recipe[cookbase]"
-	    ]
-	}
-
+```ruby
+{
+    "run_list": [
+        "recipe[mac_os_x]",
+        "recipe[dmg]",
+        "recipe[homebrew]",
+        "recipe[zip_app]",
+        "recipe[cookbase]"
+    ]
+}
+```
 *But we don't need one in our case ...*
 Just to note what happens behind the scenes 
 
 ## Let's execute soloist and see how much clutter it saves us ...
-
-	$ soloist 
-	Installing dmg (1.1.0)
-	Installing homebrew (1.3.2)
-	Installing mac_os_x (1.4.2)
-	Installing zip_app (0.2.2)
-
+```bash
+$ soloist 
+Installing dmg (1.1.0)
+Installing homebrew (1.3.2)
+Installing mac_os_x (1.4.2)
+Installing zip_app (0.2.2)
+```
 So, in the background soloist runs *librarian chef* and pulls down all the cookbooks [ defaults to: http://community.opscode.com/cookbooks/ ].
-
+```bash
 	Starting Chef Client, version 11.4.4
 	[2013-07-16T00:21:18+03:00] INFO: *** Chef 11.4.4 ***
 	[2013-07-16T00:21:19+03:00] INFO: Setting the run_list to ["mac_os_x", "homebrew", "dmg", "zip_app", "cookbase"] from JSON
@@ -266,7 +269,7 @@ So, in the background soloist runs *librarian chef* and pulls down all the cookb
 	[2013-07-16T00:21:21+03:00] INFO: Running report handlers
 	[2013-07-16T00:21:21+03:00] INFO: Report handlers complete
 	Chef Client finished, 11 resources updated
-
+```
 
 Great bottom line **	Chef Client finished, 11 resources updated** ...
 
