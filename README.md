@@ -168,7 +168,7 @@ I put the first one as an example you can see the full file in [the repository](
 	}
 
 *But we don't need one in our case ...*
-Just to note behind the scenes if you exmine /tmp you will find 
+Just to note what happens behind the scenes 
 
 ## Let's execute soloist and see how much clutter is saves us ...
 
